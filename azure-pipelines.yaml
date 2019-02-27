@@ -13,23 +13,24 @@ pr:
   paths:
     exclude: ["README.md"]
 
-- job: phase_1
-  displayName: "Phase 1"
-  pool:
-    vmImage: "ubuntu-16.04"
-  steps:
-    - task: GoTool@0
-      displayName: 'Use Go 1.12'
-      inputs:
-        version: 1.12
+jobs:
+  - job: phase_1
+    displayName: "Phase 1"
+    pool:
+      vmImage: "ubuntu-16.04"
+    steps:
+      - task: GoTool@0
+        displayName: 'Use Go 1.12'
+        inputs:
+          version: 1.12
 
-    - task: Bash@3
-      displayName: 'Bash Script'
-      inputs:
-        targetType: ./
-        filePath: 'azure-pipelines.sh'
+      - task: Bash@3
+        displayName: 'Bash Script'
+        inputs:
+          targetType: ./
+          filePath: 'azure-pipelines.sh'
 
-    - task: PublishBuildArtifacts@1
-      displayName: 'Publish artifact'
-      inputs:
-        ArtifactName: 'autopeer'
+      - task: PublishBuildArtifacts@1
+        displayName: 'Publish artifact'
+        inputs:
+          ArtifactName: 'autopeer'
