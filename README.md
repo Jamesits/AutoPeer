@@ -6,6 +6,8 @@ We automated peering process by pulling peer data from [PeeringDB](https://www.p
 
 [![Build Status](https://dev.azure.com/nekomimiswitch/General/_apis/build/status/AutoPeer?branchName=master)](https://dev.azure.com/nekomimiswitch/General/_build/latest?definitionId=43&branchName=master)
 
+Prebuilt binaries for Linux (amd64) can be retrieved from the CI above, or use my personal [Fast Ring](https://releases.swineson.me/releases/autopeer/autopeer-linux-amd64).
+
 ## BGP Daemon Support
 
 * [Bird](https://bird.network.cz/) 1.6
