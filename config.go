@@ -2,18 +2,18 @@ package main
 
 import "net"
 
-type config struct {
-	Backend       string         `toml:"backend"`   // generated config format
-	RouterID      string         `toml:"router_id"` // Router ID, either an IP or an interface name
-	Asn           int64          `toml:"asn"`       // our ASN
-	Interfaces    []netInterface `toml:"interface"`
-	Announcements []string       `toml:"announcements"`
+var conf *config
 
-	// will be auto-filled
-	Tables []string
+type config struct {
+	Format     string         `toml:"format"` // generated config format
+	Asn        int64          `toml:"asn"`    // our ASN
+	Interfaces []netInterface `toml:"interface"`
 
 	// inherited
 	Table string `toml:"table"`
+
+	// internal
+	tables []string
 }
 
 type netInterface struct {
@@ -21,6 +21,9 @@ type netInterface struct {
 	Ixp      string `toml:"ixp"`  // IXP name
 	Peers    []peer `toml:"peer"` // peers on that interface
 	MultiHop int8   `toml:"multihop"`
+	// multihop:
+	// 0 is a "default" value (do not override application/template)
+	// 1 is "explicitly direct"
 
 	// inherited
 	Table string `toml:"table"`
@@ -49,5 +52,8 @@ type bgpSession struct {
 
 	// will be auto-generated
 	Name string `toml:"name"`
-	IPv6 bool   `toml:"ipv6"`
+
+	// internal
+	ipv6      bool
+	processed bool
 }

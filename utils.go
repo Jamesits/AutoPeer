@@ -1,6 +1,7 @@
 package main
 
 import (
+	"net"
 	"reflect"
 	"regexp"
 	"strings"
@@ -42,4 +43,10 @@ func cleanString(s string) string {
 
 	// prevent first character being a digit
 	return "AP_" + rep
+}
+
+func isIPv6(ip net.IP) bool {
+	// Note: there are some controversy on net.IP.To4() == nil, see:
+	// https://stackoverflow.com/questions/22751035/golang-distinguish-ipv4-ipv6
+	return ip.To4() == nil
 }
