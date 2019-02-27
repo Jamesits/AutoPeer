@@ -1,8 +1,6 @@
 # AutoPeer
 
-Config generator for BGP players.
-
-We automated peering process by pulling peer data from [PeeringDB](https://www.peeringdb.com/), so you are finally free from the boring and error-prone process of manually inputting IPs and ASNs into your BGP daemon config.
+We automated peering process by pulling peer data from [PeeringDB](https://www.peeringdb.com/), so you are finally free from the boring and error-prone process of manually inputting IPs into your BGP daemon config. You only need to configure your peer's ASN and you are good to go.
 
 [![Build Status](https://dev.azure.com/nekomimiswitch/General/_apis/build/status/AutoPeer?branchName=master)](https://dev.azure.com/nekomimiswitch/General/_build/latest?definitionId=43&branchName=master)
 
