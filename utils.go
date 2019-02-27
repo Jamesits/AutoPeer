@@ -1,6 +1,10 @@
 package main
 
-import "reflect"
+import (
+	"reflect"
+	"regexp"
+	"strings"
+)
 
 // https://codereview.stackexchange.com/a/60085
 func inArray(val interface{}, array interface{}) (exists bool, index int) {
@@ -28,4 +32,14 @@ var uidCounter = 0
 func getUid() int {
 	uidCounter += 1
 	return uidCounter
+}
+
+func cleanString(s string) string {
+	s = strings.Trim(s, " ")
+	re := regexp.MustCompile(`[^a-zA-Z0-9_]`)
+
+	rep := re.ReplaceAllString(s, "_")
+
+	// prevent first character being a digit
+	return "AP_" + rep
 }

@@ -161,7 +161,7 @@ func main() {
 					if len(ipaddr4) > 0 {
 						log.Printf("Creating IPv4 session %d, %s\n", asn, ipaddr4)
 						conf.Interfaces[ifaceIndex].Peers[peerIndex].BgpSessions = append(conf.Interfaces[ifaceIndex].Peers[peerIndex].BgpSessions, bgpSession{
-							Name:         fmt.Sprintf("%d_%d", asn, getUid()),
+							Name:         cleanString(fmt.Sprintf("%s_%d", name, getUid())),
 							PeerEndpoint: net.ParseIP(ipaddr4),
 							Asn:          peerDef.Asn,
 							Template:     peerDef.Template,
@@ -174,7 +174,7 @@ func main() {
 					if len(ipaddr6) > 0 {
 						log.Printf("Creating IPv6 session %d, %s\n", asn, ipaddr6)
 						conf.Interfaces[ifaceIndex].Peers[peerIndex].BgpSessions = append(conf.Interfaces[ifaceIndex].Peers[peerIndex].BgpSessions, bgpSession{
-							Name:         fmt.Sprintf("%d_%d", asn, getUid()),
+							Name:         cleanString(fmt.Sprintf("%s_%d", name, getUid())),
 							PeerEndpoint: net.ParseIP(ipaddr6),
 							Asn:          peerDef.Asn,
 							Template:     peerDef.Template,
