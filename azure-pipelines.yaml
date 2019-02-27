@@ -6,11 +6,12 @@ trigger:
     include: ["master"]
   paths:
     exclude: ["README.md"]
-  pr:
-    branches:
-      include: ["master"]
-    paths:
-      exclude: ["README.md"]
+
+pr:
+  branches:
+    include: ["master"]
+  paths:
+    exclude: ["README.md"]
 
   - job: phase_1
     displayName: "Phase 1"
