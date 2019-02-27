@@ -17,6 +17,8 @@ function build() {
     echo "Building for OS=$1 ARCH=$2"
 
     env GOOS="$1" GOARCH="$2" go build -ldflags="-s -w" -o ${BUILD_ARTIFACTSTAGINGDIRECTORY}/${EXE}-"$3"
+
+    echo "Compressing executable"
     ! upx --ultra-brute ${BUILD_ARTIFACTSTAGINGDIRECTORY}/${EXE}-"$3" || true
 }
 
