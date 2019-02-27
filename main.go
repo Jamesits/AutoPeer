@@ -18,7 +18,7 @@ func main() {
 	pwd, err := os.Getwd()
 	hardFail(err)
 
-	var configPath = flag.String("config", "config.toml", "config file")
+	var configPath = flag.String("config", "autopeer.toml", "config file")
 	var outputPath = flag.String("output", pwd, "output folder")
 	var format = flag.String("format", "", "override output format")
 	flag.Parse()

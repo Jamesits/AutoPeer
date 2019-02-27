@@ -1,0 +1,37 @@
+format = "bird1"
+asn = 205610
+
+# default routing table name
+# the table must be created
+# table = "test"
+
+[[interface]]
+name = "eth0" # match the interface name of your network card connected to the IX
+ixp = "FIXO" # match IX name on PeeringDB (case sensitive)
+
+# example of a manual configured peer
+[[interface.peer]]
+asn = 61300
+# bird template; optional
+template = "bgp_ixp"
+
+[[interface.peer.session]]
+name = "FIXO_RS_1"
+peer_endpoint = "91.198.176.253"
+
+[[interface.peer.session]]
+name = "FIXO_RS_2"
+peer_endpoint = "91.198.176.254"
+
+[[interface.peer.session]]
+name = "FIXO_RS_3"
+peer_endpoint = "2001:7f8:41::1:61:300:1"
+
+[[interface.peer.session]]
+name = "FIXO_RS_4"
+peer_endpoint = "2001:7f8:41::1:61:300:2"
+
+# example of an auto configured peer
+[[interface.peer]]
+asn = 6939
+template = "bgp_peer"
