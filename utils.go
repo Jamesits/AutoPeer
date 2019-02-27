@@ -2,6 +2,7 @@ package main
 
 import (
 	"net"
+	"os"
 	"reflect"
 	"regexp"
 	"strings"
@@ -49,4 +50,16 @@ func isIPv6(ip net.IP) bool {
 	// Note: there are some controversy on net.IP.To4() == nil, see:
 	// https://stackoverflow.com/questions/22751035/golang-distinguish-ipv4-ipv6
 	return ip.To4() == nil
+}
+
+// exists returns whether the given file or directory exists
+func fileExists(path string) (bool, error) {
+	_, err := os.Stat(path)
+	if err == nil {
+		return true, nil
+	}
+	if os.IsNotExist(err) {
+		return false, nil
+	}
+	return true, err
 }

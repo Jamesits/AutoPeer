@@ -18,10 +18,28 @@ func main() {
 	pwd, err := os.Getwd()
 	hardFail(err)
 
-	var configPath = flag.String("config", "autopeer.toml", "config file")
-	var outputPath = flag.String("output", pwd, "output folder")
+	var configPath = flag.String("config", "-", "config file")
+	var outputPath = flag.String("output", "-", "output folder")
 	var format = flag.String("format", "", "override output format")
 	flag.Parse()
+
+	if ok, _ := fileExists("/etc/bird"); ok {
+		if *configPath == "-" {
+			*configPath = "/etc/bird/autopeer.toml"
+		}
+
+		if *outputPath == "-" {
+			*outputPath = "/etc/bird"
+		}
+	} else {
+		if *configPath == "-" {
+			*configPath = "autopeer.toml"
+		}
+
+		if *outputPath == "-" {
+			*outputPath = pwd
+		}
+	}
 
 	log.Println("AutoPeer BGP configuration generator https://github.com/Jamesits/AutoPeer")
 
