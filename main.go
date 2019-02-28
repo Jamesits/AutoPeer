@@ -5,12 +5,16 @@ import (
 	"flag"
 	"fmt"
 	"github.com/BurntSushi/toml"
+	"github.com/Microsoft/ApplicationInsights-Go/appinsights"
 	"github.com/buger/jsonparser"
 	"log"
 	"net"
 	"os"
 	"strings"
+	"time"
 )
+
+var client appinsights.TelemetryClient
 
 func main() {
 	var err error
@@ -18,9 +22,12 @@ func main() {
 	pwd, err := os.Getwd()
 	hardFail(err)
 
+	// load config file
 	var configPath = flag.String("config", "-", "config file")
 	var outputPath = flag.String("output", "-", "output folder")
 	var format = flag.String("format", "", "override output format")
+	var verbose = flag.Bool("verbose", false, "no shutup")
+	var telemetry = flag.Bool("telemetry", false, "enable telemetry")
 	flag.Parse()
 
 	if ok, _ := fileExists("/etc/bird"); ok {
@@ -46,6 +53,20 @@ func main() {
 	conf = &config{}
 	metaData, err := toml.DecodeFile(*configPath, conf)
 	hardFail(err)
+
+	// load Application Insights
+	conf.Telemetry = conf.Telemetry || *telemetry
+	if len(conf.TelemetryKey) == 0 {
+		conf.TelemetryKey = "0bb67684-cece-4a13-b1ad-1be13f66b7e1"
+	}
+	client = appinsights.NewTelemetryClient(conf.TelemetryKey)
+	defer flushTelemetry()
+	if *verbose {
+		appinsights.NewDiagnosticsMessageListener(func(msg string) error {
+			fmt.Printf("[%s] %s\n", time.Now().Format(time.UnixDate), msg)
+			return nil
+		})
+	}
 
 	// print unknown config variables
 	for _, key := range metaData.Undecoded() {
@@ -110,7 +131,9 @@ func main() {
 
 			// try to get peer information
 			peerNetId := getNetIdFromAsn(peerDef.Asn)
-			if peerNetId != -1 {
+			if peerNetId == -1 {
+				log.Printf("[WARNING] ASN %d does not exist in PeeringDB\n", peerDef.Asn)
+			} else {
 				// retrieved data from data source, fill config
 				peerInfoObj := getNetInfoObject(peerNetId)
 
@@ -245,5 +268,5 @@ func main() {
 	// invoke generator function
 	generator_bird1(conf, outputPath)
 
-	log.Println("AutoPeer done.")
+	log.Println("AutoPeer done, cleaning up...")
 }

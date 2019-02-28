@@ -5,9 +5,11 @@ import "net"
 var conf *config
 
 type config struct {
-	Format     string         `toml:"format"` // generated config format
-	Asn        int64          `toml:"asn"`    // our ASN
-	Interfaces []netInterface `toml:"interface"`
+	Format       string         `toml:"format"` // generated config format
+	Asn          int64          `toml:"asn"`    // our ASN
+	Interfaces   []netInterface `toml:"interface"`
+	Telemetry    bool           `toml:"telemetry"` // is telemetry enabled
+	TelemetryKey string         `toml:"telemetry_key"`
 
 	// inherited
 	Table string `toml:"table"`
