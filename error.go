@@ -1,3 +1,4 @@
+// Application Insights support functions
 package main
 
 import (
@@ -6,6 +7,34 @@ import (
 	"time"
 )
 
+var client appinsights.TelemetryClient
+
+type TelemetryLevel byte
+
+const (
+	Disabled TelemetryLevel = iota
+	CrashOnly
+	Full
+)
+
+var CurrentTelemetryLevel = Full
+
+func telemetryReportNeeded(isCrash bool) bool {
+	if CurrentTelemetryLevel == Full {
+		return true
+	}
+
+	if CurrentTelemetryLevel == Disabled {
+		return false
+	}
+
+	if isCrash == true {
+		return true
+	}
+
+	return false
+}
+
 // check every fucking err
 func hardFail(e error) {
 	defer func() {
@@ -13,7 +42,7 @@ func hardFail(e error) {
 			exception := appinsights.NewExceptionTelemetry(r)
 			exception.SeverityLevel = appinsights.Critical
 			exception.Frames = appinsights.GetCallstack(0)
-			if conf.Telemetry {
+			if telemetryReportNeeded(true) {
 				client.Track(exception)
 			}
 			panic(r)
@@ -31,7 +60,7 @@ func softFail(e error) {
 		exception := appinsights.NewExceptionTelemetry(e)
 		exception.SeverityLevel = appinsights.Warning
 		exception.Frames = appinsights.GetCallstack(0)
-		if conf.Telemetry {
+		if telemetryReportNeeded(false) {
 			client.Track(exception)
 		}
 		log.Printf("[ERROR] %s", e)
